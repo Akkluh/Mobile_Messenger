@@ -15,7 +15,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun LoginScreen() {
+fun LoginScreen(
+    onLogin: (String, String) -> Unit,
+) {
     var login by remember { mutableStateOf("") }
      var password by remember { mutableStateOf("") }
      Box(modifier = Modifier.fillMaxSize().background(BackGround)) {
@@ -40,9 +42,9 @@ fun LoginScreen() {
                  }
          }
              Spacer(modifier = Modifier.height(28.dp))
-             Button(onClick = {}, shape = RoundedCornerShape(18.dp),
+             Button(onClick = {onLogin(login, password)}, shape = RoundedCornerShape(18.dp),
                  modifier = Modifier.width(180.dp).height(56.dp), colors = ButtonDefaults.buttonColors(Orange)) {
-                 Text("Log In")
+                 Text(text = "Log In", modifier = Modifier.padding(horizontal = 28.dp, vertical = 8.dp))
              }
          }
      }

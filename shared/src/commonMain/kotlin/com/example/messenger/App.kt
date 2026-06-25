@@ -16,15 +16,25 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.messenger.data.repository.AuthRepositoryImpl
+import com.example.messenger.domain.usecase.LoginUseCase
 import com.example.messenger.ui.screens.LoginScreen
+import com.example.messenger.viewmodel.LoginViewModel
 import org.jetbrains.compose.resources.painterResource
-
+import kotlinx.coroutines.launch
+import androidx.compose.runtime.rememberCoroutineScope
 import messenger.shared.generated.resources.Res
 import messenger.shared.generated.resources.compose_multiplatform
 @Composable
 @Preview
 fun App() {
+    val viewModel = remember { LoginViewModel(
+        LoginUseCase(AuthRepositoryImpl()),
+    ) }
+    val scope = rememberCoroutineScope()
+    val currenUser by viewModel.currentUser.collectAsState()
     MaterialTheme {
-        LoginScreen()
+        println(currenUser)
+        LoginScreen(onLogin = { login, password -> scope.launch {viewModel.login(login, password)}})
     }
 }
