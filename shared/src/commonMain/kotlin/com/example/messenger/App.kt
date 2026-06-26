@@ -30,6 +30,7 @@ import messenger.shared.generated.resources.compose_multiplatform
 import com.example.messenger.ui.screens.ChatListScreen
 import com.example.messenger.viewmodel.ChatViewModel
 import com.example.messenger.domain.model.Chat
+import com.example.messenger.ui.screens.ChatScreen
 
 @Composable
 @Preview
@@ -42,7 +43,7 @@ fun App() {
     val currenUser by viewModel.currentUser.collectAsState()
     val errorMessage by viewModel.errorMessage.collectAsState()
     val chatList by chatViewModel.chatList.collectAsState()
-    val selectedChat by remember {mutableStateOf<Chat?>(null)}
+    var selectedChat by remember {mutableStateOf<Chat?>(null)}
     LaunchedEffect(currenUser) {
         if (currenUser != null) {
             chatViewModel.loadChatList()
@@ -52,8 +53,11 @@ fun App() {
         if (currenUser == null) {
             LoginScreen(onLogin = { login, password -> scope.launch {viewModel.login(login, password)}}, errorMessage = errorMessage)
         }
-        else{
-            ChatListScreen(chats = chatList, onChatClick = {println(it)})
+        else if (selectedChat == null) {
+            ChatListScreen(chats = chatList, onChatClick = {chat -> selectedChat = chat})
+        }
+        else {
+            selectedChat?.let {chat -> ChatScreen(chat = chat, onBack = {selectedChat = null})}
         }
     }
 }
