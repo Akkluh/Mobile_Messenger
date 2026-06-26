@@ -23,18 +23,37 @@ import com.example.messenger.viewmodel.LoginViewModel
 import org.jetbrains.compose.resources.painterResource
 import kotlinx.coroutines.launch
 import androidx.compose.runtime.rememberCoroutineScope
+import com.example.messenger.data.repository.ChatRepositoryImpl
+import com.example.messenger.domain.usecase.LoadChatListUseCase
 import messenger.shared.generated.resources.Res
 import messenger.shared.generated.resources.compose_multiplatform
+import com.example.messenger.ui.screens.ChatListScreen
+import com.example.messenger.viewmodel.ChatViewModel
+import com.example.messenger.domain.model.Chat
+
 @Composable
 @Preview
 fun App() {
     val viewModel = remember { LoginViewModel(
         LoginUseCase(AuthRepositoryImpl()),
     ) }
+    val chatViewModel = remember { ChatViewModel(LoadChatListUseCase(ChatRepositoryImpl())) }
     val scope = rememberCoroutineScope()
     val currenUser by viewModel.currentUser.collectAsState()
+    val errorMessage by viewModel.errorMessage.collectAsState()
+    val chatList by chatViewModel.chatList.collectAsState()
+    val selectedChat by remember {mutableStateOf<Chat?>(null)}
+    LaunchedEffect(currenUser) {
+        if (currenUser != null) {
+            chatViewModel.loadChatList()
+        }
+    }
     MaterialTheme {
-        println(currenUser)
-        LoginScreen(onLogin = { login, password -> scope.launch {viewModel.login(login, password)}})
+        if (currenUser == null) {
+            LoginScreen(onLogin = { login, password -> scope.launch {viewModel.login(login, password)}}, errorMessage = errorMessage)
+        }
+        else{
+            ChatListScreen(chats = chatList, onChatClick = {println(it)})
+        }
     }
 }

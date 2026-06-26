@@ -5,7 +5,7 @@ import com.example.messenger.domain.model.User
 import com.example.messenger.domain.usecase.LoginUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 
-class LoginViewModel(private val loginUseCase: LoginUseCase) {
+class LoginViewModel(private val loginUseCase: LoginUseCase): ViewModel() {
     val currentUser = MutableStateFlow<User?>(null)
     val isLoading = MutableStateFlow(false)
     val errorMessage = MutableStateFlow<String?>(null)

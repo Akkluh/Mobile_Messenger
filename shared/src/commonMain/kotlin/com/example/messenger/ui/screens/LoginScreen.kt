@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.sp
 @Composable
 fun LoginScreen(
     onLogin: (String, String) -> Unit,
+    errorMessage: String?,
 ) {
     var login by remember { mutableStateOf("") }
      var password by remember { mutableStateOf("") }
@@ -45,6 +46,10 @@ fun LoginScreen(
              Button(onClick = {onLogin(login, password)}, shape = RoundedCornerShape(18.dp),
                  modifier = Modifier.width(180.dp).height(56.dp), colors = ButtonDefaults.buttonColors(Orange)) {
                  Text(text = "Log In", modifier = Modifier.padding(horizontal = 28.dp, vertical = 8.dp))
+             }
+             if (errorMessage != null) {
+                 Spacer(modifier = Modifier.height(16.dp))
+                 Text(text = errorMessage)
              }
          }
      }
