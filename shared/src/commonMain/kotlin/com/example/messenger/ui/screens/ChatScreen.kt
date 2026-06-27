@@ -14,11 +14,15 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.Send
 import androidx.compose.runtime.*
 import androidx.compose.foundation.lazy.items
+import com.example.messenger.viewmodel.MessageViewModel
 
 @Composable
-fun ChatScreen(chat: Chat, onBack: () -> Unit) {
+fun ChatScreen(chat: Chat, onBack: () -> Unit, messagesViewModel: MessageViewModel) {
     var messageText by remember { mutableStateOf("") }
-    var messages by remember { mutableStateOf(listOf<String>()) }
+    val messages = messagesViewModel.messages.collectAsState()
+    LaunchedEffect(chat.id) {
+        messagesViewModel.loadMessages(chat.id)
+    }
     Column(modifier = Modifier.fillMaxSize().safeDrawingPadding()) {
         Row(modifier = Modifier.fillMaxWidth().padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
             IconButton(onClick = { onBack() }) {
@@ -29,7 +33,7 @@ fun ChatScreen(chat: Chat, onBack: () -> Unit) {
         }
         HorizontalDivider()
         LazyColumn(modifier = Modifier.weight(1f).fillMaxWidth().padding(16.dp)) {
-            if (messages.isEmpty()) {
+            if (messages.value.isEmpty()) {
                 item {
                     Box(modifier = Modifier.fillParentMaxSize(), contentAlignment = Alignment.Center) {
                         Text(text = "Сообщений пока нет")
@@ -37,10 +41,10 @@ fun ChatScreen(chat: Chat, onBack: () -> Unit) {
                 }
             }
             else {
-                items(messages){
+                items(messages.value){
                     message -> Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
                         Card(modifier = Modifier.padding(bottom = 8.dp), colors = CardDefaults.cardColors(containerColor = Orange)) {
-                        Text(text = message, modifier = Modifier.padding(16.dp), color = MaterialTheme.colorScheme.background)
+                        Text(text = message.text, modifier = Modifier.padding(16.dp), color = MaterialTheme.colorScheme.background)
                     }
                 }
                 }
@@ -51,7 +55,7 @@ fun ChatScreen(chat: Chat, onBack: () -> Unit) {
             Spacer(modifier = Modifier.width(12.dp))
             IconButton(onClick = {
                 if (messageText.isNotBlank()) {
-                    messages = messages + messageText
+                    messagesViewModel.sendMessage(chat.id, messageText)
                     messageText = ""
                 }}, enabled = messageText.isNotBlank()) {
                 Icon(imageVector = Icons.AutoMirrored.Filled.Send   , contentDescription = "Send", tint = Orange)
