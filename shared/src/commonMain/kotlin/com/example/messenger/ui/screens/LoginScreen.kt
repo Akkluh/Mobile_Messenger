@@ -13,6 +13,7 @@ import com.example.messenger.ui.theme.BackGround
 import com.example.messenger.ui.theme.Orange
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.sp
+import com.example.messenger.ui.theme.messengerTextFieldColors
 
 @Composable
 fun LoginScreen(
@@ -36,10 +37,10 @@ fun LoginScreen(
                  shape = RoundedCornerShape(32.dp)) {
                  Column(modifier = Modifier.padding(24.dp)) {
                      OutlinedTextField(value = login, onValueChange = { login = it },
-                         label = {Text("Login")},)
+                         label = {Text("Login")}, colors = messengerTextFieldColors())
                      Spacer(modifier = Modifier.height(16.dp))
                      OutlinedTextField(value = password, onValueChange = { password = it },
-                         label = {Text("Password")},)
+                         label = {Text("Password")}, colors = messengerTextFieldColors())
                  }
          }
              Spacer(modifier = Modifier.height(28.dp))
