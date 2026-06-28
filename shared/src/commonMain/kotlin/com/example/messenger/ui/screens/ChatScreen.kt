@@ -14,11 +14,12 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.Send
 import androidx.compose.runtime.*
 import androidx.compose.foundation.lazy.items
+import com.example.messenger.domain.model.User
 import com.example.messenger.viewmodel.MessageViewModel
 import com.example.messenger.ui.util.timeFormat
 
 @Composable
-fun ChatScreen(chat: Chat, onBack: () -> Unit, messagesViewModel: MessageViewModel) {
+fun ChatScreen(chat: Chat, onBack: () -> Unit, messagesViewModel: MessageViewModel, currentUser: User) {
     var messageText by remember { mutableStateOf("") }
     val messages = messagesViewModel.messages.collectAsState()
     val isLoading = messagesViewModel.loading.collectAsState()
@@ -52,12 +53,21 @@ fun ChatScreen(chat: Chat, onBack: () -> Unit, messagesViewModel: MessageViewMod
             }
             else {
                 items(messages.value){
-                    message -> Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
-                        Card(modifier = Modifier.padding(bottom = 8.dp), colors = CardDefaults.cardColors(containerColor = Orange)) {
+                    message ->
+                    val isMine = message.sender.id == currentUser.id
+                    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = if (isMine) Arrangement.End else Arrangement.Start) {
+                        Card(modifier = Modifier.padding(bottom = 8.dp), colors = CardDefaults.cardColors(containerColor =
+                            if (isMine) Orange else MaterialTheme.colorScheme.surfaceVariant)) {
                             Column(modifier = Modifier.padding(12.dp)) {
-                                Text(text = message.sender.login, color = MaterialTheme.colorScheme.background.copy(alpha = 0.7f), style = MaterialTheme.typography.labelMedium)
-                                Text(text = message.text, color = MaterialTheme.colorScheme.background)
-                                Text(text = timeFormat(message.timestamp), color = MaterialTheme.colorScheme.background.copy(alpha = 0.7f),
+                                Text(text = message.sender.login, color =
+                                    if (isMine) MaterialTheme.colorScheme.background.copy(alpha = 0.7f)
+                                    else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
+                                    style = MaterialTheme.typography.labelMedium)
+                                Text(text = message.text, color =
+                                    if (isMine) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.onSurface)
+                                Text(text = timeFormat(message.timestamp), color =
+                                    if (isMine) MaterialTheme.colorScheme.background.copy(alpha = 0.7f)
+                                    else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
                                     style = MaterialTheme.typography.bodySmall, modifier = Modifier.align(Alignment.End))
                             }
 

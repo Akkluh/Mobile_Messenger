@@ -13,6 +13,18 @@ class MessageRepositoryImpl: MessageRepository {
     }
 
     override suspend fun load(chatId: Int): List<Message> {
-        return messages[chatId]?.toList() ?: emptyList()
+        val chatMessage = messages.getOrPut(chatId) { mutableListOf() }
+        if (chatMessage.isEmpty()) {
+            chatMessage.add(
+                Message(
+                    id = -1,
+                    text = "Привет! Это тестовое сообщение!",
+                    timestamp = System.currentTimeMillis() - 60000,
+                    sender = User(id = 2, login = "Собеседник")
+                )
+            )
+        }
+        return chatMessage.toList()
+
     }
 }

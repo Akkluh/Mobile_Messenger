@@ -50,7 +50,7 @@ fun App() {
                 val currentChatViewModel = remember(chat.id) {
                     MessageViewModel(SendMessageUseCase(messageRepository), LoadMessagesUseCase(messageRepository))
                 }
-                ChatScreen(chat = chat, onBack = {selectedChat = null}, currentChatViewModel)}
+                ChatScreen(chat = chat, onBack = {selectedChat = null}, currentChatViewModel, currenUser!!)}
         }
     }
 }
