@@ -24,9 +24,11 @@ fun ChatListScreen(
             Text(text = "Messenger", color = MaterialTheme.colorScheme.background, fontSize = 26.sp, fontWeight = FontWeight.Bold)
         }
         LazyColumn(modifier = Modifier.fillMaxSize().padding(16.dp)) {
-            items(chats) { chat -> Card(onClick = {onChatClick(chat)},  modifier = Modifier.fillMaxWidth().padding(bottom = 12.dp)){
+            items(chats) { chat ->
+                Card(onClick = {onChatClick(chat)},  modifier = Modifier.fillMaxWidth().padding(bottom = 12.dp),
+                    colors = CardDefaults.cardColors(contentColor = MaterialTheme.colorScheme.surface)) {
                 Column(modifier = Modifier.padding(20.dp)) {
-                    Text(text = chat.title)
+                    Text(text = chat.title, style = MaterialTheme.typography.titleMedium, color = Orange)
                 }
             } }
     }

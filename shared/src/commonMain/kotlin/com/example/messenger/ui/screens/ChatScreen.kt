@@ -14,6 +14,7 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.Send
 import androidx.compose.runtime.*
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import com.example.messenger.domain.model.User
 import com.example.messenger.viewmodel.MessageViewModel
 import com.example.messenger.ui.util.timeFormat
@@ -24,8 +25,15 @@ fun ChatScreen(chat: Chat, onBack: () -> Unit, messagesViewModel: MessageViewMod
     val messages = messagesViewModel.messages.collectAsState()
     val isLoading = messagesViewModel.loading.collectAsState()
     val loaded = messagesViewModel.loaded.collectAsState()
+    val listState = rememberLazyListState()
+
     LaunchedEffect(chat.id) {
         messagesViewModel.loadMessages(chat.id)
+    }
+    LaunchedEffect(messages.value.size) {
+        if (messages.value.isNotEmpty()) {
+            listState.animateScrollToItem(messages.value.lastIndex)
+        }
     }
     Column(modifier = Modifier.fillMaxSize().safeDrawingPadding()) {
         Row(modifier = Modifier.fillMaxWidth().padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
@@ -36,7 +44,7 @@ fun ChatScreen(chat: Chat, onBack: () -> Unit, messagesViewModel: MessageViewMod
             Text(text = chat.title, color = Orange, style = MaterialTheme.typography.headlineSmall)
         }
         HorizontalDivider()
-        LazyColumn(modifier = Modifier.weight(1f).fillMaxWidth().padding(16.dp)) {
+        LazyColumn(modifier = Modifier.weight(1f).fillMaxWidth().padding(16.dp), state = listState) {
             if (!loaded.value || isLoading.value) {
                 item{
                     Box(modifier = Modifier.fillParentMaxHeight().fillMaxWidth(), contentAlignment = Alignment.Center) {

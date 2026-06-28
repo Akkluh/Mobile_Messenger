@@ -2,6 +2,7 @@ package com.example.messenger.ui.screens
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -11,9 +12,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.messenger.ui.theme.BackGround
 import com.example.messenger.ui.theme.Orange
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.sp
 import com.example.messenger.ui.theme.messengerTextFieldColors
+import androidx.compose.foundation.verticalScroll
 
 @Composable
 fun LoginScreen(
@@ -23,7 +24,7 @@ fun LoginScreen(
     var login by remember { mutableStateOf("") }
      var password by remember { mutableStateOf("") }
      Box(modifier = Modifier.fillMaxSize().background(BackGround)) {
-         Column (modifier = Modifier.fillMaxSize().padding(32.dp),
+         Column (modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()).imePadding().padding(32.dp),
              horizontalAlignment = Alignment.CenterHorizontally,
              verticalArrangement = Arrangement.Center) {
              Surface(shape = RoundedCornerShape(50.dp), color = Orange) {

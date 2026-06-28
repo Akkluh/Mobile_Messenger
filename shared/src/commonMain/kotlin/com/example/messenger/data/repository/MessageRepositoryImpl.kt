@@ -10,6 +10,13 @@ class MessageRepositoryImpl: MessageRepository {
         val message = Message(id = messages[chatId]?.size ?: 0, text = text, timestamp = System.currentTimeMillis(), sender = User(id = 1, login = "admin"))
         val chatMessage = messages.getOrPut(chatId) { mutableListOf() }
         chatMessage.add(message)
+        val replyMessage = Message(
+            id = chatMessage.size,
+            text = "Это тестовое сообщение!",
+            timestamp = System.currentTimeMillis(),
+            sender = User(id = 2, login = "Собеседник")
+        )
+        chatMessage.add(replyMessage)
     }
 
     override suspend fun load(chatId: Int): List<Message> {
@@ -25,6 +32,5 @@ class MessageRepositoryImpl: MessageRepository {
             )
         }
         return chatMessage.toList()
-
     }
 }
