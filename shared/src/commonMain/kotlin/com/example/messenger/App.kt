@@ -28,12 +28,6 @@ fun App() {
     ) }
     val chatViewModel = remember { ChatViewModel(LoadChatListUseCase(ChatRepositoryImpl())) }
     val messageRepository = remember { MessageRepositoryImpl() }
-    val messageViewModel = remember {
-        MessageViewModel(
-            SendMessageUseCase(messageRepository),
-            LoadMessagesUseCase(messageRepository)
-        )
-    }
     val scope = rememberCoroutineScope()
     val currenUser by viewModel.currentUser.collectAsState()
     val errorMessage by viewModel.errorMessage.collectAsState()

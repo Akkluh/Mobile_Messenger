@@ -15,11 +15,14 @@ import androidx.compose.material.icons.automirrored.filled.Send
 import androidx.compose.runtime.*
 import androidx.compose.foundation.lazy.items
 import com.example.messenger.viewmodel.MessageViewModel
+import com.example.messenger.ui.util.timeFormat
 
 @Composable
 fun ChatScreen(chat: Chat, onBack: () -> Unit, messagesViewModel: MessageViewModel) {
     var messageText by remember { mutableStateOf("") }
     val messages = messagesViewModel.messages.collectAsState()
+    val isLoading = messagesViewModel.loading.collectAsState()
+    val loaded = messagesViewModel.loaded.collectAsState()
     LaunchedEffect(chat.id) {
         messagesViewModel.loadMessages(chat.id)
     }
@@ -33,9 +36,16 @@ fun ChatScreen(chat: Chat, onBack: () -> Unit, messagesViewModel: MessageViewMod
         }
         HorizontalDivider()
         LazyColumn(modifier = Modifier.weight(1f).fillMaxWidth().padding(16.dp)) {
-            if (messages.value.isEmpty()) {
+            if (!loaded.value || isLoading.value) {
+                item{
+                    Box(modifier = Modifier.fillParentMaxHeight().fillMaxWidth(), contentAlignment = Alignment.Center) {
+                        CircularProgressIndicator(color = Orange)
+                    }
+                }
+            }
+            else if(messages.value.isEmpty()) {
                 item {
-                    Box(modifier = Modifier.fillParentMaxSize(), contentAlignment = Alignment.Center) {
+                    Box(modifier = Modifier.fillParentMaxHeight().fillMaxWidth(), contentAlignment = Alignment.Center) {
                         Text(text = "Сообщений пока нет")
                     }
                 }
@@ -44,7 +54,13 @@ fun ChatScreen(chat: Chat, onBack: () -> Unit, messagesViewModel: MessageViewMod
                 items(messages.value){
                     message -> Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
                         Card(modifier = Modifier.padding(bottom = 8.dp), colors = CardDefaults.cardColors(containerColor = Orange)) {
-                        Text(text = message.text, modifier = Modifier.padding(16.dp), color = MaterialTheme.colorScheme.background)
+                            Column(modifier = Modifier.padding(12.dp)) {
+                                Text(text = message.sender.login, color = MaterialTheme.colorScheme.background.copy(alpha = 0.7f), style = MaterialTheme.typography.labelMedium)
+                                Text(text = message.text, color = MaterialTheme.colorScheme.background)
+                                Text(text = timeFormat(message.timestamp), color = MaterialTheme.colorScheme.background.copy(alpha = 0.7f),
+                                    style = MaterialTheme.typography.bodySmall, modifier = Modifier.align(Alignment.End))
+                            }
+
                     }
                 }
                 }
