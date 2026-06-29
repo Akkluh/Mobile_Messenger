@@ -28,11 +28,12 @@ class LoginViewModel(private val loginUseCase: LoginUseCase): ViewModel() {
         viewModelScope.launch {
             _isLoading.value = true
             _errorMessage.value = null
-            val user = loginUseCase.execute(login, password)
-            _currentUser.value = user
-            if (user == null) {
-                _errorMessage.value = "Неверный логин или пароль"
-            }
+            val result = loginUseCase.execute(login, password)
+            result.fold(
+                onSuccess = { user -> _currentUser.value = user},
+                onFailure = {exception -> _currentUser.value = null
+                    _errorMessage.value = exception.localizedMessage}
+            )
             _isLoading.value = false
         }
     }

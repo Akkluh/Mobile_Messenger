@@ -3,7 +3,7 @@ import com.example.messenger.domain.model.User
 import com.example.messenger.domain.repository.AuthRepository
 
 class LoginUseCase(private val repository: AuthRepository) {
-    suspend fun execute(login: String, password: String): User? {
+    suspend fun execute(login: String, password: String): Result<User> {
         return repository.logIn(login, password)
     }
 }
