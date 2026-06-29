@@ -1,21 +1,16 @@
 package com.example.messenger.data.network
 
+import messenger.shared.generated.resources.Res
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import java.io.IOException
+
 class XmlMockLoader {
-    fun loadLoginResponse(request: String): String {
-        if(request.contains("<login>admin</login>") && request.contains("<password>admin</password>")) {
-            return """
-                <User>
-                <id>1</id>
-                <login>admin</login>
-                </User>
-            """
+    @OptIn(ExperimentalResourceApi::class)
+    suspend fun loadXmlResponse(fileName: String): String {
+        return try {
+            Res.readBytes("files/$fileName").decodeToString()
+        } catch (e: Exception) {
+            throw IOException("Ошибка при чтении XML-заглушки", e)
         }
-        return """
-            <Error>
-            <message>
-            Wrong login or password
-            </message>
-            </Error>
-        """
     }
 }

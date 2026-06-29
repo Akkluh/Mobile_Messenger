@@ -11,14 +11,14 @@ class AuthRepositoryImpl : AuthRepository {
     private val soapClient = SoapClient()
     private val xmlResponse = XmlMockLoader()
     private val parser = XmlParser()
-    // private val isNetworkAvailable = false
+    private val isNetworkAvailable = true
     override suspend fun logIn(login: String, password: String): Result<User> {
         return try {
-//            if (!isNetworkAvailable) {
-//                throw IOException("Network is not available")
-//            }
+           if (!isNetworkAvailable) {
+                throw IOException("Network is not available")
+            }
             val request = soapClient.buildLoginRequest(login, password)
-            val response = xmlResponse.loadLoginResponse(request)
+            val response = xmlResponse.loadXmlResponse("login_response.xml")
             val user = parser.parseUser(response)
             if (user != null) {
                 Result.success(user)

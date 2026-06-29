@@ -1,0 +1,10 @@
+<Envelope>
+    <Body>
+        <LoginResponse>
+            <User>
+                <Id>1</Id>
+                <Login>admin</Login>
+            </User>
+        </LoginResponse>
+    </Body>
+</Envelope>

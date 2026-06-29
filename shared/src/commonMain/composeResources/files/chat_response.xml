@@ -1,0 +1,14 @@
+<Envelope>
+    <Body>
+        <ChatList>
+            <Chat>
+                <Id>1</Id>
+                <Title>Капуста</Title>
+            </Chat>
+            <Chat>
+                <Id>2</Id>
+                <Title>Огурец</Title>
+            </Chat>
+        </ChatList>
+    </Body>
+</Envelope>

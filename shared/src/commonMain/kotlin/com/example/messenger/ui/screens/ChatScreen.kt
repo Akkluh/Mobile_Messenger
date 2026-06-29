@@ -128,14 +128,8 @@ fun ChatScreen(chat: Chat, onBack: () -> Unit, messagesViewModel: MessageViewMod
                 Spacer(modifier = Modifier.width(12.dp))
                 IconButton(onClick = {
                     if (messageText.isNotBlank()) {
-                        val isNetworkOk = true
-                        if (isNetworkOk) {
-                            messagesViewModel.sendMessage(chat.id, messageText)
-                            messageText = ""
-                        }
-                        else {
-                            chatErrorText = "Ошибка отправки. Нет сети"
-                        }
+                        messagesViewModel.sendMessage(chat.id, messageText)
+                        messageText = ""
                     }}, enabled = messageText.isNotBlank()) {
                     Icon(imageVector = Icons.AutoMirrored.Filled.Send, contentDescription = "Send", tint = Orange)
                 }

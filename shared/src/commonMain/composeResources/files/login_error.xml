@@ -1,0 +1,7 @@
+<Envelope>
+    <Body>
+        <LoginResponse>
+            <Error>Invalid credentials</Error>
+        </LoginResponse>
+    </Body>
+</Envelope>

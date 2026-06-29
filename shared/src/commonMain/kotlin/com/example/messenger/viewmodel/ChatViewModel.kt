@@ -24,7 +24,7 @@ class ChatViewModel(private val loadChatListUseCase: LoadChatListUseCase) : View
             } catch (e: IOException) {
                 _errorMessage.value = "Не удалось загрузить чаты. Проверьте подключение."
             } catch (e: Exception) {
-                _errorMessage.value = "Проищошла ошибка при загрузке данных"
+                _errorMessage.value = "Произошла ошибка при загрузке данных"
             }
         }
     }
