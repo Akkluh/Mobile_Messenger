@@ -15,6 +15,7 @@ import com.example.messenger.ui.theme.Orange
 import androidx.compose.ui.unit.sp
 import com.example.messenger.ui.theme.messengerTextFieldColors
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.ui.graphics.Color
 
 @Composable
 fun LoginScreen(
@@ -50,8 +51,21 @@ fun LoginScreen(
                  Text(text = "Log In", modifier = Modifier.padding(horizontal = 28.dp, vertical = 8.dp))
              }
              if (errorMessage != null) {
-                 Spacer(modifier = Modifier.height(16.dp))
-                 Text(text = errorMessage)
+                 Spacer(modifier = Modifier.height(20.dp))
+                 Surface(
+                     modifier = Modifier.fillMaxWidth(0.85f),
+                     color = Color(0xFFFFF0F0),
+                     shape = RoundedCornerShape(12.dp),
+                     border = BorderStroke(1.dp, color = Color(0xFFD32F2F))
+                 ){
+                     Box(modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
+                         contentAlignment = Alignment.Center) {
+                         Text(text = errorMessage,
+                             color = Color(0xFFD32F2F),
+                             style = MaterialTheme.typography.bodyMedium,
+                             fontWeight = FontWeight.Medium,)
+                     }
+                 }
              }
          }
      }

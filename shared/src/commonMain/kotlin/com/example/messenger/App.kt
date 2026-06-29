@@ -7,8 +7,6 @@ import com.example.messenger.data.repository.AuthRepositoryImpl
 import com.example.messenger.domain.usecase.LoginUseCase
 import com.example.messenger.ui.screens.LoginScreen
 import com.example.messenger.viewmodel.LoginViewModel
-import kotlinx.coroutines.launch
-import androidx.compose.runtime.rememberCoroutineScope
 import com.example.messenger.data.repository.ChatRepositoryImpl
 import com.example.messenger.data.repository.MessageRepositoryImpl
 import com.example.messenger.domain.usecase.LoadChatListUseCase
@@ -28,7 +26,6 @@ fun App() {
     ) }
     val chatViewModel = remember { ChatViewModel(LoadChatListUseCase(ChatRepositoryImpl())) }
     val messageRepository = remember { MessageRepositoryImpl() }
-    val scope = rememberCoroutineScope()
     val currenUser by viewModel.currentUser.collectAsState()
     val errorMessage by viewModel.errorMessage.collectAsState()
     val chatList by chatViewModel.chatList.collectAsState()
@@ -40,7 +37,7 @@ fun App() {
     }
     MaterialTheme {
         if (currenUser == null) {
-            LoginScreen(onLogin = { login, password -> scope.launch {viewModel.login(login, password)}}, errorMessage = errorMessage)
+            LoginScreen(onLogin = { login, password -> viewModel.login(login, password)}, errorMessage = errorMessage)
         }
         else if (selectedChat == null) {
             ChatListScreen(chats = chatList, onChatClick = {chat -> selectedChat = chat})
