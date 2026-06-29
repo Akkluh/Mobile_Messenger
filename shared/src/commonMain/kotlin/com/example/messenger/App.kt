@@ -40,7 +40,8 @@ fun App() {
             LoginScreen(onLogin = { login, password -> viewModel.login(login, password)}, errorMessage = errorMessage)
         }
         else if (selectedChat == null) {
-            ChatListScreen(chats = chatList, onChatClick = {chat -> selectedChat = chat})
+            val chatErrorMessage by chatViewModel.errorMessage.collectAsState()
+            ChatListScreen(chats = chatList, onChatClick = {chat -> selectedChat = chat}, errorMessage = chatErrorMessage, onRefresh = {chatViewModel.loadChatList()})
         }
         else {
             selectedChat?.let {chat ->
