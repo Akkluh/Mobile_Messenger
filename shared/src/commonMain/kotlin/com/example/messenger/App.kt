@@ -44,14 +44,18 @@ fun App() {
             if (!isRegisterScreen) {
                 LoginScreen(onLogin = { login, password -> viewModel.login(login, password)},
                     errorMessage = errorMessage,
-                    onOpenRegister = {isRegisterScreen = true})
+                    onOpenRegister = {isRegisterScreen = true},
+                    onCleanError = {viewModel.cleanError()},
+                    )
             }
             else{
                 RegisterScreen(onRegister = {login, email, password, repeatPassword ->
                     viewModel.register(login, email, password, repeatPassword)},
                     onBack = {
                     isRegisterScreen = false
-                }, errorMessage = errorMessage)
+                }, errorMessage = errorMessage,
+                    onCleanError = {viewModel.cleanError()},
+                    )
             }
         }
         else if (selectedChat == null) {

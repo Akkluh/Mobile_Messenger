@@ -16,13 +16,19 @@ import com.example.messenger.ui.theme.Orange
 import androidx.compose.ui.unit.sp
 import com.example.messenger.ui.theme.messengerTextFieldColors
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 
 @Composable
 fun RegisterScreen(
     onRegister: (String, String, String, String) -> Unit,
     onBack: () -> Unit,
-    errorMessage: String?
+    errorMessage: String?,
+    onCleanError: () -> Unit,
 ) {
     var login by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
@@ -73,30 +79,48 @@ fun RegisterScreen(
 
                     OutlinedTextField(
                         value = login,
-                        onValueChange = { login = it },
+                        onValueChange = { login = it
+                            onCleanError()},
                         label = { Text("Login") },
                         colors = messengerTextFieldColors()
                     )
                     Spacer(Modifier.height(16.dp))
                     OutlinedTextField(
                         value = email,
-                        onValueChange = { email = it },
+                        onValueChange = { email = it
+                                        onCleanError()},
                         label = { Text("Email") },
                         colors = messengerTextFieldColors()
                     )
                     Spacer(Modifier.height(16.dp))
-                    OutlinedTextField(
-                        value = password,
-                        onValueChange = { password = it },
-                        label = { Text("Password") },
-                        colors = messengerTextFieldColors()
-                    )
+                    var passwordVisible by remember { mutableStateOf(false) }
+                    OutlinedTextField(value = password, onValueChange = { password = it
+                                                                        onCleanError()},
+                        label = {Text("Password")}, colors = messengerTextFieldColors(),
+                        visualTransformation =  if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                        trailingIcon = {
+                            IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                                Icon(imageVector = if (passwordVisible) Icons.Default.Visibility else Icons.Default.VisibilityOff,
+                                    contentDescription = if (passwordVisible) "Hide password" else "Show password",
+                                    tint = Orange)
+                            }
+                        })
                     Spacer(Modifier.height(16.dp))
+                    var repeatPasswordVisible by remember { mutableStateOf(false) }
                     OutlinedTextField(
                         value = repeatPassword,
-                        onValueChange = { repeatPassword = it },
+                        onValueChange = { repeatPassword = it
+                                        onCleanError()},
                         label = { Text("Repeat password") },
-                        colors = messengerTextFieldColors()
+                        colors = messengerTextFieldColors(),
+                        visualTransformation = if (repeatPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                        trailingIcon = {
+                            IconButton(onClick = { repeatPasswordVisible = !repeatPasswordVisible }) {
+                                Icon(imageVector = if (repeatPasswordVisible) Icons.Default.Visibility else Icons.Default.VisibilityOff,
+                                    contentDescription = if (repeatPasswordVisible) "Hide repeat password" else "Show repeat password",
+                                    tint = Orange)
+                            }
+                        }
                     )
                 }
             }

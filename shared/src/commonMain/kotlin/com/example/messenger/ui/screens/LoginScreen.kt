@@ -16,13 +16,19 @@ import com.example.messenger.ui.theme.Orange
 import androidx.compose.ui.unit.sp
 import com.example.messenger.ui.theme.messengerTextFieldColors
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 
 @Composable
 fun LoginScreen(
     onLogin: (String, String) -> Unit,
     errorMessage: String?,
     onOpenRegister: () -> Unit,
+    onCleanError: () -> Unit,
 ) {
     var login by remember { mutableStateOf("") }
      var password by remember { mutableStateOf("") }
@@ -40,11 +46,22 @@ fun LoginScreen(
                  elevation = CardDefaults.cardElevation(12.dp),
                  shape = RoundedCornerShape(32.dp)) {
                  Column(modifier = Modifier.padding(24.dp)) {
-                     OutlinedTextField(value = login, onValueChange = { login = it },
+                     OutlinedTextField(value = login, onValueChange = { login = it
+                         onCleanError()},
                          label = {Text("Login")}, colors = messengerTextFieldColors())
                      Spacer(modifier = Modifier.height(16.dp))
-                     OutlinedTextField(value = password, onValueChange = { password = it },
-                         label = {Text("Password")}, colors = messengerTextFieldColors())
+                     var passwordVisible by remember { mutableStateOf(false) }
+                     OutlinedTextField(value = password, onValueChange = { password = it
+                         onCleanError()},
+                         label = {Text("Password")}, colors = messengerTextFieldColors(),
+                         visualTransformation =  if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                         trailingIcon = {
+                             IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                                 Icon(imageVector = if (passwordVisible) Icons.Default.Visibility else Icons.Default.VisibilityOff,
+                                     contentDescription = if (passwordVisible) "Hide password" else "Show password",
+                                     tint = Orange)
+                             }
+                         })
                  }
          }
              Spacer(modifier = Modifier.height(28.dp))

@@ -31,7 +31,9 @@ class LoginViewModel(private val loginUseCase: LoginUseCase, private val registe
             _isLoading.value = true
             val result = loginUseCase.execute(login, password)
             result.fold(
-                onSuccess = { user -> _currentUser.value = user},
+                onSuccess = {
+                    _errorMessage.value = null
+                    _currentUser.value = it},
                 onFailure = {exception -> _currentUser.value = null
                     _errorMessage.value = exception.localizedMessage}
             )
@@ -60,10 +62,15 @@ class LoginViewModel(private val loginUseCase: LoginUseCase, private val registe
             _isLoading.value = true
             val result = registerUseCase.execute(login, email, password)
             result.fold(
-                onSuccess = { _currentUser.value = it},
+                onSuccess = {
+                    _errorMessage.value = null
+                    _currentUser.value = it},
                 onFailure = {_errorMessage.value = it.localizedMessage}
             )
             _isLoading.value = false
         }
+    }
+    fun cleanError() {
+        _errorMessage.value = null
     }
 }
