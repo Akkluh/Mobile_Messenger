@@ -8,12 +8,12 @@ import kotlin.time.Duration.Companion.milliseconds
 
 class MessageRepositoryImpl: MessageRepository {
     private val messages = mutableMapOf<Int, MutableList<Message>>()
-    override suspend fun send(chatId: Int, text: String) {
+    override suspend fun send(chatId: Int, text: String, sender: User) {
         try {
             val message = Message(
                 id = messages[chatId]?.size ?: 0,
                 text = text, timestamp = System.currentTimeMillis(),
-                sender = User(id = 1, login = "admin")
+                sender = sender
             )
             val chatMessage = messages.getOrPut(chatId) { mutableListOf() }
             chatMessage.add(message)

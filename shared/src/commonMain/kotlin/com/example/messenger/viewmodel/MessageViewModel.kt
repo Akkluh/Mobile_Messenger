@@ -3,6 +3,7 @@ package com.example.messenger.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.messenger.domain.model.Message
+import com.example.messenger.domain.model.User
 import com.example.messenger.domain.usecase.LoadMessagesUseCase
 import com.example.messenger.domain.usecase.SendMessageUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,9 +20,9 @@ class MessageViewModel(private val sendMessageUseCase: SendMessageUseCase,
     val loading = _loading.asStateFlow()
     private val _loaded = MutableStateFlow(false)
     val loaded = _loaded.asStateFlow()
-    fun sendMessage(chatId: Int, text: String) {
+    fun sendMessage(chatId: Int, text: String, sender: User) {
         viewModelScope.launch {
-            sendMessageUseCase.execute(chatId, text)
+            sendMessageUseCase.execute(chatId, text, sender)
             val updatedHistory = loadMessagesUseCase.execute(chatId)
             _messages.value = updatedHistory
         }

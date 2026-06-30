@@ -128,7 +128,7 @@ fun ChatScreen(chat: Chat, onBack: () -> Unit, messagesViewModel: MessageViewMod
                 Spacer(modifier = Modifier.width(12.dp))
                 IconButton(onClick = {
                     if (messageText.isNotBlank()) {
-                        messagesViewModel.sendMessage(chat.id, messageText)
+                        messagesViewModel.sendMessage(chat.id, messageText, currentUser)
                         messageText = ""
                     }}, enabled = messageText.isNotBlank()) {
                     Icon(imageVector = Icons.AutoMirrored.Filled.Send, contentDescription = "Send", tint = Orange)
