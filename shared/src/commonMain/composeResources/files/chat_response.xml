@@ -5,7 +5,7 @@
     <soap:Body>
         <mes:ChatList>
             <mes:Chat>
-                <mes:Id>1</mes:Id>
+                <mes:Id>5</mes:Id>
                 <mes:Title>Капуста</mes:Title>
             </mes:Chat>
             <mes:Chat>

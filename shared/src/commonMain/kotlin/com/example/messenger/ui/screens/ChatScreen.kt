@@ -16,12 +16,9 @@ import androidx.compose.material.icons.automirrored.filled.Send
 import androidx.compose.runtime.*
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material3.ScaffoldDefaults.contentWindowInsets
 import com.example.messenger.domain.model.User
 import com.example.messenger.viewmodel.MessageViewModel
 import com.example.messenger.ui.util.timeFormat
-import kotlinx.coroutines.launch
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
@@ -34,10 +31,9 @@ fun ChatScreen(chat: Chat, onBack: () -> Unit, messagesViewModel: MessageViewMod
     val isLoading = messagesViewModel.loading.collectAsState()
     val loaded = messagesViewModel.loaded.collectAsState()
     val listState = rememberLazyListState()
-    val scope = rememberCoroutineScope()
     var chatErrorText by remember { mutableStateOf<String?>(null) }
     LaunchedEffect(chat.id) {
-        messagesViewModel.loadMessages(chat.id)
+        messagesViewModel.connectToWebSocket(chat.id)
     }
     LaunchedEffect(messages.value.size) {
         if (messages.value.isNotEmpty()) {
@@ -49,6 +45,9 @@ fun ChatScreen(chat: Chat, onBack: () -> Unit, messagesViewModel: MessageViewMod
             delay(3000)
             chatErrorText = null
         }
+    }
+    LaunchedEffect(chat.id) {
+        messagesViewModel.connectToWebSocket(chat.id)
     }
     Box(modifier = Modifier.fillMaxSize().statusBarsPadding().navigationBarsPadding())
         {

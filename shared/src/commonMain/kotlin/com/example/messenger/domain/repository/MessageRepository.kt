@@ -1,10 +1,10 @@
 package com.example.messenger.domain.repository
 
-import com.example.messenger.domain.model.Chat
 import com.example.messenger.domain.model.Message
 import com.example.messenger.domain.model.User
+import kotlinx.coroutines.flow.Flow
 
 interface MessageRepository {
     suspend fun send(chatId: Int, text: String, sender: User): Unit
-    suspend fun load(chatId: Int): List<Message>
+    fun observeMessages(chatId: Int): Flow<List<Message>>
 }

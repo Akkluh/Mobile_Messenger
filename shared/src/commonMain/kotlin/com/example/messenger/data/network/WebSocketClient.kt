@@ -1,0 +1,27 @@
+package com.example.messenger.data.network
+
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
+
+class WebSocketClient {
+    private var isConnected = false
+    private val _incomingMessages = MutableSharedFlow<String>()
+    val incomingMessages: Flow<String> = _incomingMessages.asSharedFlow()
+    fun connect() {
+        isConnected = true
+        println("Connected to WebSocket!")
+    }
+    fun disconnect() {
+        isConnected = false
+        println("Disconnected from WebSocket!")
+    }
+    suspend fun send(chatId: Int, messageText: String) {
+        if (!isConnected) return
+        // симулирование задержки от сервера
+        delay(1500)
+        // имуляция ответа сервера
+        _incomingMessages.emit("$chatId: Получено сообщение: \"$messageText\"")
+    }
+}

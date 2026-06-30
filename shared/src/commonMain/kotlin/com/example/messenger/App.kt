@@ -13,7 +13,7 @@ import com.example.messenger.domain.usecase.LoadChatListUseCase
 import com.example.messenger.ui.screens.ChatListScreen
 import com.example.messenger.viewmodel.ChatViewModel
 import com.example.messenger.domain.model.Chat
-import com.example.messenger.domain.usecase.LoadMessagesUseCase
+import com.example.messenger.domain.usecase.ObserveMessagesUseCase
 import com.example.messenger.domain.usecase.RegisterUseCase
 import com.example.messenger.domain.usecase.SendMessageUseCase
 import com.example.messenger.ui.screens.ChatScreen
@@ -65,7 +65,7 @@ fun App() {
         else {
             selectedChat?.let {chat ->
                 val currentChatViewModel = remember(chat.id) {
-                    MessageViewModel(SendMessageUseCase(messageRepository), LoadMessagesUseCase(messageRepository))
+                    MessageViewModel(SendMessageUseCase(messageRepository), ObserveMessagesUseCase(messageRepository))
                 }
                 ChatScreen(chat = chat, onBack = {selectedChat = null}, currentChatViewModel, currenUser!!)}
         }
