@@ -46,9 +46,6 @@ fun ChatScreen(chat: Chat, onBack: () -> Unit, messagesViewModel: MessageViewMod
             chatErrorText = null
         }
     }
-    LaunchedEffect(chat.id) {
-        messagesViewModel.connectToWebSocket(chat.id)
-    }
     Box(modifier = Modifier.fillMaxSize().statusBarsPadding().navigationBarsPadding())
         {
         Column(modifier = Modifier.fillMaxSize()) {

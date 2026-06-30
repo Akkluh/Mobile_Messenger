@@ -30,11 +30,8 @@ class MessageViewModel(private val sendMessageUseCase: SendMessageUseCase,
     }
     fun connectToWebSocket(chatId: Int) {
         viewModelScope.launch {
-            _loading.value = true
-            _loading.value = false
-            observeMessagesUseCase.execute(chatId).collectLatest { updateHistory ->
-                _messages.value = updateHistory
-                _loading.value = false
+            observeMessagesUseCase.execute(chatId).collectLatest {
+                _messages.value = it
                 _loaded.value = true
             }
         }
