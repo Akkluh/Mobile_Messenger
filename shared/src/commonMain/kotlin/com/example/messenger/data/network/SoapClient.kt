@@ -26,4 +26,18 @@ class SoapClient {
            </soapenv:Envelope>
         """.trimIndent()
     }
+    fun buildRegisterRequest(login: String, email: String, password: String): String {
+        return """
+            <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:mes="http://example.com/messenger">
+                <soapenv:Header/>
+                    <soapenv:Body>
+                        <mes:RegisterRequest>
+                            <mes:Login>${login}</mes:Login>
+                            <mes:Email>${email}</mes:Email>
+                            <mes:Password>${password}</mes:Password>
+                        </mes:RegisterRequest>
+                    </soapenv:Body>
+            </soapenv:Envelope>
+        """.trimIndent()
+    }
 }

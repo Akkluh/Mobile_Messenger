@@ -1,7 +1,12 @@
-<Envelope>
-    <Body>
-        <LoginResponse>
-            <Error>Invalid credentials</Error>
-        </LoginResponse>
-    </Body>
-</Envelope>
+<?xml version="1.0" encoding="UTF-8"?>
+<soap:Envelope
+        xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"
+        xmlns:mes="http://example.com/messenger">
+    <soap:Body>
+        <mes:LoginResponse>
+            <mes:Error>
+                Invalid credentials
+            </mes:Error>
+        </mes:LoginResponse>
+    </soap:Body>
+</soap:Envelope>

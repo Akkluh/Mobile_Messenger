@@ -2,13 +2,9 @@
 <soap:Envelope
         xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"
         xmlns:mes="http://example.com/messenger">
-    <soap:Header/>
     <soap:Body>
-        <mes:LoginResponse>
-            <mes:User>
-                <mes:Id>1</mes:Id>
-                <mes:Login>admin</mes:Login>
-            </mes:User>
-        </mes:LoginResponse>
+        <mes:Error>
+            Connection lost
+        </mes:Error>
     </soap:Body>
 </soap:Envelope>

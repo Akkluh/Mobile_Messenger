@@ -1,4 +1,5 @@
 package com.example.messenger.ui.screens
+
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -21,6 +22,7 @@ import androidx.compose.ui.graphics.Color
 fun LoginScreen(
     onLogin: (String, String) -> Unit,
     errorMessage: String?,
+    onOpenRegister: () -> Unit,
 ) {
     var login by remember { mutableStateOf("") }
      var password by remember { mutableStateOf("") }
@@ -49,6 +51,10 @@ fun LoginScreen(
              Button(onClick = {onLogin(login, password)}, shape = RoundedCornerShape(18.dp),
                  modifier = Modifier.width(180.dp).height(56.dp), colors = ButtonDefaults.buttonColors(Orange)) {
                  Text(text = "Log In", modifier = Modifier.padding(horizontal = 28.dp, vertical = 8.dp))
+             }
+             Spacer(modifier = Modifier.height(12.dp))
+             TextButton(onClick = onOpenRegister) {
+                 Text(text = "Нет аккаунта? Зарегистрироваться", color = Orange)
              }
              if (errorMessage != null) {
                  Spacer(modifier = Modifier.height(20.dp))

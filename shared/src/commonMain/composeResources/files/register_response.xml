@@ -4,11 +4,11 @@
         xmlns:mes="http://example.com/messenger">
     <soap:Header/>
     <soap:Body>
-        <mes:LoginResponse>
+        <mes:RegisterResponse>
             <mes:User>
-                <mes:Id>1</mes:Id>
-                <mes:Login>admin</mes:Login>
+                <mes:Id>10</mes:Id>
+                <mes:Login>new_user</mes:Login>
             </mes:User>
-        </mes:LoginResponse>
+        </mes:RegisterResponse>
     </soap:Body>
 </soap:Envelope>

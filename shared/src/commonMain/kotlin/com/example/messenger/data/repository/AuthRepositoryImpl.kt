@@ -11,13 +11,10 @@ class AuthRepositoryImpl : AuthRepository {
     private val soapClient = SoapClient()
     private val xmlResponse = XmlMockLoader()
     private val parser = XmlParser()
-    private val isNetworkAvailable = true
     override suspend fun logIn(login: String, password: String): Result<User> {
         return try {
-           if (!isNetworkAvailable) {
-                throw IOException("Network is not available")
-            }
             val request = soapClient.buildLoginRequest(login, password)
+            // Здесь должен быть сетевой вызов, но пока вместо сервера мок
             val response = xmlResponse.loadXmlResponse("login_response.xml")
             val user = parser.parseUser(response)
             if (user != null) {
@@ -32,7 +29,19 @@ class AuthRepositoryImpl : AuthRepository {
             Result.failure(Exception("Ошибка сервера при обработке данных"))
         }
     }
-    override suspend fun register(login: String, password: String): User? {
-        return User(1, login)
+    override suspend fun register(login: String, email: String, password: String): Result<User> {
+        return try {
+            val request = soapClient.buildRegisterRequest(login, email, password)
+            val response = xmlResponse.loadXmlResponse("register_response.xml")
+            val user = parser.parseUser(response)
+            if (user != null) {
+                Result.success(user)
+            }
+            else {
+                Result.failure(Exception("Ошибка регистрации"))
+            }
+        } catch (e: IOException) {
+            Result.failure(Exception("Нет подключения"))
+        }
     }
 }

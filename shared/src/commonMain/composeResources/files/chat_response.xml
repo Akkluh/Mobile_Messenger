@@ -1,14 +1,17 @@
-<Envelope>
-    <Body>
-        <ChatList>
-            <Chat>
-                <Id>1</Id>
-                <Title>Капуста</Title>
-            </Chat>
-            <Chat>
-                <Id>2</Id>
-                <Title>Огурец</Title>
-            </Chat>
-        </ChatList>
-    </Body>
-</Envelope>
+<?xml version="1.0" encoding="UTF-8"?>
+<soap:Envelope
+        xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"
+        xmlns:mes="http://example.com/messenger">
+    <soap:Body>
+        <mes:ChatList>
+            <mes:Chat>
+                <mes:Id>1</mes:Id>
+                <mes:Title>Капуста</mes:Title>
+            </mes:Chat>
+            <mes:Chat>
+                <mes:Id>2</mes:Id>
+                <mes:Title>Огурец</mes:Title>
+            </mes:Chat>
+        </mes:ChatList>
+    </soap:Body>
+</soap:Envelope>

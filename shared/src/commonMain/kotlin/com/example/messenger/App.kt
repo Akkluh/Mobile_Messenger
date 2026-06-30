@@ -14,8 +14,10 @@ import com.example.messenger.ui.screens.ChatListScreen
 import com.example.messenger.viewmodel.ChatViewModel
 import com.example.messenger.domain.model.Chat
 import com.example.messenger.domain.usecase.LoadMessagesUseCase
+import com.example.messenger.domain.usecase.RegisterUseCase
 import com.example.messenger.domain.usecase.SendMessageUseCase
 import com.example.messenger.ui.screens.ChatScreen
+import com.example.messenger.ui.screens.RegisterScreen
 import com.example.messenger.viewmodel.MessageViewModel
 
 @Composable
@@ -23,6 +25,7 @@ import com.example.messenger.viewmodel.MessageViewModel
 fun App() {
     val viewModel = remember { LoginViewModel(
         LoginUseCase(AuthRepositoryImpl()),
+        RegisterUseCase(AuthRepositoryImpl()),
     ) }
     val chatViewModel = remember { ChatViewModel(LoadChatListUseCase(ChatRepositoryImpl())) }
     val messageRepository = remember { MessageRepositoryImpl() }
@@ -30,6 +33,7 @@ fun App() {
     val errorMessage by viewModel.errorMessage.collectAsState()
     val chatList by chatViewModel.chatList.collectAsState()
     var selectedChat by remember {mutableStateOf<Chat?>(null)}
+    var isRegisterScreen by remember {mutableStateOf(false)}
     LaunchedEffect(currenUser) {
         if (currenUser != null) {
             chatViewModel.loadChatList()
@@ -37,7 +41,18 @@ fun App() {
     }
     MaterialTheme {
         if (currenUser == null) {
-            LoginScreen(onLogin = { login, password -> viewModel.login(login, password)}, errorMessage = errorMessage)
+            if (!isRegisterScreen) {
+                LoginScreen(onLogin = { login, password -> viewModel.login(login, password)},
+                    errorMessage = errorMessage,
+                    onOpenRegister = {isRegisterScreen = true})
+            }
+            else{
+                RegisterScreen(onRegister = {login, email, password, repeatPassword ->
+                    viewModel.register(login, email, password, repeatPassword)},
+                    onBack = {
+                    isRegisterScreen = false
+                }, errorMessage = errorMessage)
+            }
         }
         else if (selectedChat == null) {
             val chatErrorMessage by chatViewModel.errorMessage.collectAsState()
