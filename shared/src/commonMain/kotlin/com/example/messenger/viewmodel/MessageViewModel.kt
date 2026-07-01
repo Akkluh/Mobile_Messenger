@@ -28,9 +28,9 @@ class MessageViewModel(private val sendMessageUseCase: SendMessageUseCase,
             sendMessageUseCase.execute(chatId, text, sender)
         }
     }
-    fun connectToWebSocket(chatId: Int) {
+    fun connectToWebSocket(chatId: Int, currentUserId: Int) {
         viewModelScope.launch {
-            observeMessagesUseCase.execute(chatId).collectLatest {
+            observeMessagesUseCase.execute(chatId, currentUserId).collectLatest {
                 _messages.value = it
                 _loaded.value = true
             }

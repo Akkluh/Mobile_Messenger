@@ -43,7 +43,7 @@ class LoginViewModel(private val loginUseCase: LoginUseCase, private val registe
     fun register(login: String, email: String, password: String, repeatPassword: String) {
         _errorMessage.value = null
         if (login.isBlank() || email.isBlank() || password.isBlank() || repeatPassword.isBlank()) {
-            _errorMessage.value = "Зполните все поля"
+            _errorMessage.value = "Заполните все поля"
             return
         }
         if (login.length < 4 || password.length < 4) {

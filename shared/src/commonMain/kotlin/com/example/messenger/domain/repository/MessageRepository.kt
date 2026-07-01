@@ -6,5 +6,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface MessageRepository {
     suspend fun send(chatId: Int, text: String, sender: User): Unit
-    fun observeMessages(chatId: Int): Flow<List<Message>>
+    fun observeMessages(chatId: Int, currentUserId: Int): Flow<List<Message>>
 }

@@ -22,6 +22,7 @@ class MessageRepositoryImpl(
     private val dbQueries: MessengerDatabaseQueries = database.messengerDatabaseQueries
     private val messagesMap = mutableMapOf<Int, MutableList<Message>>()
     private val flows = mutableMapOf<Int, MutableStateFlow<List<Message>>>()
+    private var activeUserId: Long = 1L
 
     init {
         socket.connect()
@@ -30,6 +31,7 @@ class MessageRepositoryImpl(
                 val messageId = System.currentTimeMillis()
                 dbQueries.insertMessage(
                     id = messageId,
+                    my_user_id = activeUserId,
                     chat_id = it.chatId.toLong(),
                     sender_id = 114L,
                     sender_name = "Собеседник",
@@ -52,8 +54,10 @@ class MessageRepositoryImpl(
 
     override suspend fun send(chatId: Int, text: String, sender: User) {
         val messageId = System.currentTimeMillis()
+        activeUserId = sender.id.toLong()
         dbQueries.insertMessage(
             id = messageId,
+            my_user_id = sender.id.toLong(),
             chat_id = chatId.toLong(),
             sender_id = sender.id.toLong(),
             text = text,
@@ -73,19 +77,10 @@ class MessageRepositoryImpl(
         socket.send(chatId, text)
     }
 
-    override fun observeMessages(chatId: Int): Flow<List<Message>> {
+    override fun observeMessages(chatId: Int, currentUserId: Int): Flow<List<Message>> {
+        activeUserId = currentUserId.toLong()
         val history = messagesMap.getOrPut(chatId) {
-            val dbList = dbQueries.loadMessages(chatId.toLong()).executeAsList()
-            if (dbList.isEmpty()) {
-                mutableListOf(
-                    Message(
-                        id = 1,
-                        text = "Привет! Это тест",
-                        timestamp = System.currentTimeMillis(),
-                        sender = User(2, "Собеседник")
-                    )
-                )
-            } else {
+            val dbList = dbQueries.loadMessages(chatId.toLong(), my_user_id = currentUserId.toLong()).executeAsList()
                 dbList.map { dbMsg ->
                     Message(
                         id = dbMsg.id.toInt(),
@@ -95,8 +90,6 @@ class MessageRepositoryImpl(
                     )
                 }.toMutableList()
             }
-        }
-
         return flows.getOrPut(chatId) {
             MutableStateFlow(history.toList())
         }

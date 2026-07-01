@@ -5,7 +5,7 @@ import com.example.messenger.domain.repository.MessageRepository
 import kotlinx.coroutines.flow.Flow
 
 class ObserveMessagesUseCase(private val messageRepository: MessageRepository) {
-    fun execute(chatId: Int): Flow<List<Message>> {
-        return messageRepository.observeMessages(chatId)
+    fun execute(chatId: Int, currentUserId: Int): Flow<List<Message>> {
+        return messageRepository.observeMessages(chatId, currentUserId)
     }
 }

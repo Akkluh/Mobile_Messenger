@@ -33,7 +33,7 @@ fun ChatScreen(chat: Chat, onBack: () -> Unit, messagesViewModel: MessageViewMod
     val listState = rememberLazyListState()
     var chatErrorText by remember { mutableStateOf<String?>(null) }
     LaunchedEffect(chat.id) {
-        messagesViewModel.connectToWebSocket(chat.id)
+        messagesViewModel.connectToWebSocket(chat.id, currentUser.id)
     }
     LaunchedEffect(messages.value.size) {
         if (messages.value.isNotEmpty()) {

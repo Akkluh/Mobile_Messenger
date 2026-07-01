@@ -1,7 +1,5 @@
 package com.example.messenger.domain.usecase
 
-import com.example.messenger.domain.repository.ChatRepository
-import com.example.messenger.domain.model.Message
 import com.example.messenger.domain.model.User
 import com.example.messenger.domain.repository.MessageRepository
 
