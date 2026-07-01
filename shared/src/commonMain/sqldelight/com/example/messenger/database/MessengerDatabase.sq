@@ -1,0 +1,44 @@
+CREATE TABLE users (
+id INTEGER NOT NULL PRIMARY KEY,
+login TEXT NOT NULL,
+email TEXT
+);
+CREATE TABLE chats (
+id INTEGER NOT NULL PRIMARY KEY,
+title TEXT NOT NULL
+);
+CREATE TABLE messages(
+id INTEGER NOT NULL PRIMARY KEY,
+chat_id INTEGER NOT NULL,
+sender_id INTEGER NOT NULL,
+sender_name TEXT NOT NULL,
+text TEXT NOT NULL,
+timestamp INTEGER NOT NULL,
+FOREIGN KEY(chat_id) REFERENCES chats(id),
+FOREIGN KEY(sender_id) REFERENCES users(id)
+);
+loadMessages:
+SELECT * FROM messages
+WHERE chat_id = ?
+ORDER BY timestamp;
+
+insertMessage:
+INSERT INTO messages(
+id,
+chat_id,
+sender_id,
+sender_name,
+text,
+timestamp
+)
+VALUES (?, ?, ?, ?, ?, ?);
+
+loadChats:
+SELECT * FROM chats;
+
+insertChat:
+INSERT INTO chats(
+id,
+title
+)
+VALUES (?, ?);

@@ -1,5 +1,8 @@
 package com.example.messenger
 
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import com.example.messenger.data.repository.DatabaseDriverFactory
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.tooling.preview.Preview
@@ -21,14 +24,13 @@ import com.example.messenger.ui.screens.RegisterScreen
 import com.example.messenger.viewmodel.MessageViewModel
 
 @Composable
-@Preview
-fun App() {
+fun App(driverFactory: DatabaseDriverFactory) {
     val viewModel = remember { LoginViewModel(
         LoginUseCase(AuthRepositoryImpl()),
         RegisterUseCase(AuthRepositoryImpl()),
     ) }
     val chatViewModel = remember { ChatViewModel(LoadChatListUseCase(ChatRepositoryImpl())) }
-    val messageRepository = remember { MessageRepositoryImpl() }
+    val messageRepository = remember { MessageRepositoryImpl(driverFactory) }
     val currenUser by viewModel.currentUser.collectAsState()
     val errorMessage by viewModel.errorMessage.collectAsState()
     val chatList by chatViewModel.chatList.collectAsState()
@@ -46,16 +48,16 @@ fun App() {
                     errorMessage = errorMessage,
                     onOpenRegister = {isRegisterScreen = true},
                     onCleanError = {viewModel.cleanError()},
-                    )
+                )
             }
             else{
                 RegisterScreen(onRegister = {login, email, password, repeatPassword ->
                     viewModel.register(login, email, password, repeatPassword)},
                     onBack = {
-                    isRegisterScreen = false
-                }, errorMessage = errorMessage,
+                        isRegisterScreen = false
+                    }, errorMessage = errorMessage,
                     onCleanError = {viewModel.cleanError()},
-                    )
+                )
             }
         }
         else if (selectedChat == null) {
